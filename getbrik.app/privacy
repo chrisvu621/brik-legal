@@ -1,1 +1,37 @@
+PRIVACY POLICY — BRIK
+Last updated: April 3, 2026
 
+Overview
+BRIK is a personal fitness app designed to generate and track workouts on your device. Your privacy is important to us. This policy explains what data we collect (spoiler: none) and how your information is handled.
+
+Data Collection
+We do not collect any personal data. We do not require account creation, login, email addresses, or any personally identifiable information to use the app.
+
+Local Storage Only
+All workout data is stored locally on your device using on-device storage (AsyncStorage). Your equipment preferences, workout history, achievements, and settings never leave your phone. There are no servers receiving your data.
+
+Analytics & Tracking
+We do not use analytics, tracking pixels, advertising identifiers, or any form of usage monitoring. Your activity within the app is completely private.
+
+Third-Party Sharing
+We do not share, sell, rent, or transfer any data to third parties. Since we don't collect data, there is nothing to share.
+
+Data Stored on Your Device
+The only data stored is:
+• Equipment preferences (which gear you own)
+• Workout history (completed sessions)
+• Achievement progress
+• App settings (fitness level, duration, days per week)
+All of this is stored locally on your device and is never transmitted anywhere.
+
+Deleting Your Data
+Since all data is stored locally on your device, you can delete all app data by simply uninstalling the app. There is no account to delete and no server-side data to request removal of.
+
+Children's Privacy
+We do not knowingly collect any information from anyone, including children under the age of 13.
+
+Changes to This Policy
+We may update this privacy policy from time to time. Any changes will be reflected in the app with an updated "Last Updated" date.
+
+Contact
+If you have any questions, please contact us at the email provided on our app store listing.
