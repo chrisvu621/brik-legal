@@ -1,0 +1,45 @@
+{
+  "id": "challenge_001",
+  "title": "THE PYRAMID",
+  "type": "pyramid",
+  "startDate": "2026-04-14",
+  "endDate": "2026-05-14",
+  "description": "Start at 10 reps and work your way down to 1. Complete all 5 exercises each round before dropping a rep. Simple. Brutal. Earned.",
+  "estimatedMinutes": 30,
+  "equipment": ["bodyweight", "barbell", "kettlebell"],
+  "startingReps": 10,
+  "exercises": [
+    {
+      "id": "burpees",
+      "name": "Burpees",
+      "reps": 10,
+      "equipment": "bodyweight"
+    },
+    {
+      "id": "bb_bent_over_row",
+      "name": "BB Bent Over Row",
+      "reps": 10,
+      "equipment": "barbell"
+    },
+    {
+      "id": "dead_bug",
+      "name": "Dead Bugs",
+      "reps": 10,
+      "equipment": "bodyweight"
+    },
+    {
+      "id": "reverse_lunge",
+      "name": "Reverse Lunges",
+      "reps": 10,
+      "equipment": "bodyweight"
+    },
+    {
+      "id": "kb_swing",
+      "name": "KB Swings",
+      "reps": 10,
+      "equipment": "kettlebell"
+    }
+  ],
+  "warning": "This challenge takes 25-35 minutes to complete. Make sure you have adequate time, space, and equipment before you begin.",
+  "shareText": "Just crushed THE PYRAMID challenge on BRIK in {time}. Think you can beat it? getbrik.app"
+}
