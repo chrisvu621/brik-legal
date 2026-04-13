@@ -1,3 +1,9 @@
 /challenge.json
   Access-Control-Allow-Origin: *
   Content-Type: application/json
+
+/privacy
+  Content-Type: text/html
+
+/terms
+  Content-Type: text/html
