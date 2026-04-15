@@ -1,7 +1,7 @@
 {
   "id": "challenge_001",
   "title": "THE PYRAMID",
-  "type": "accumulator",
+  "type": "pyramid",
   "startDate": "2026-04-14",
   "endDate": "2026-05-14",
   "description": "Start at 10 reps and work your way down to 1. Complete all 5 exercises each round before dropping a rep. Simple. Brutal. Earned.",
