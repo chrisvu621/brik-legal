@@ -7,3 +7,6 @@
 
 /terms
   Content-Type: text/html
+/.well-known/apple-app-site-association
+  Content-Type: application/json
+  Access-Control-Allow-Origin: *
