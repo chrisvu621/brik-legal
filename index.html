@@ -1,18 +1,335 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>BRIK Legal</title>
-  <style>
-    body { background:#000; color:#fff; 
-    font-family:-apple-system,sans-serif; 
-    padding:40px; }
-    a { color:#00d4ff; display:block; 
-    margin:16px 0; font-size:18px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BRIK — HIIT & Hyrox Workout Generator</title>
+<meta name="description" content="Smart-generated strength and conditioning workouts for HYROX, DEKA, and serious gym training. No repeats. No planning. Just show up.">
+<meta property="og:title" content="BRIK — HIIT & Hyrox Workout Generator">
+<meta property="og:description" content="Smart-generated strength and conditioning workouts for HYROX, DEKA, and serious gym training. No repeats. No planning. Just show up.">
+<meta property="og:url" content="https://getbrik.app">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --glacier: #00d4ff;
+    --glacier-dim: rgba(0,212,255,0.12);
+    --black: #000000;
+    --surface: #0a0a0a;
+    --card: #111111;
+    --border: rgba(255,255,255,0.07);
+    --text: #ffffff;
+    --text-secondary: rgba(255,255,255,0.55);
+    --text-muted: rgba(255,255,255,0.3);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--black);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+  .nav-logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;color:var(--text);text-decoration:none}
+  .nav-cta{background:var(--glacier);color:#000;padding:10px 24px;border-radius:100px;font-weight:600;font-size:14px;text-decoration:none;letter-spacing:.5px;transition:all .2s ease}
+  .nav-cta:hover{background:#fff;transform:translateY(-1px)}
+
+  /* HERO */
+  .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:140px 24px 100px;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;top:15%;left:50%;transform:translateX(-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(0,212,255,.07) 0%,transparent 70%);pointer-events:none}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--glacier-dim);border:1px solid rgba(0,212,255,.3);color:var(--glacier);padding:8px 18px;border-radius:100px;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:36px;animation:fadeUp .8s ease forwards}
+  .hero-badge::before{content:'';width:6px;height:6px;background:var(--glacier);border-radius:50%;animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+  .hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(72px,13vw,152px);line-height:.88;letter-spacing:2px;margin-bottom:12px;animation:fadeUp .8s ease .1s both}
+  .hero h1 .line2{color:var(--glacier)}
+  .hero-sub{font-size:clamp(15px,2vw,18px);color:var(--text-secondary);max-width:580px;margin:0 auto 16px;font-weight:300;line-height:1.7;animation:fadeUp .8s ease .2s both}
+  .hero-identity{font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--glacier);margin-bottom:40px;animation:fadeUp .8s ease .25s both}
+  .hero-actions{display:flex;flex-direction:column;align-items:center;gap:12px;animation:fadeUp .8s ease .3s both}
+  .btn-primary{display:inline-flex;align-items:center;gap:12px;background:var(--glacier);color:#000;padding:20px 44px;border-radius:100px;font-weight:700;font-size:16px;text-decoration:none;letter-spacing:.3px;transition:all .2s ease;box-shadow:0 0 50px rgba(0,212,255,.25)}
+  .btn-primary:hover{background:#fff;transform:translateY(-2px);box-shadow:0 0 70px rgba(0,212,255,.35)}
+  .btn-primary svg{width:20px;height:20px}
+  .hero-micro{font-size:13px;color:var(--text-muted);letter-spacing:.3px}
+  .hero-pain{margin-top:56px;padding:20px 32px;background:var(--card);border:1px solid var(--border);border-radius:14px;font-size:15px;color:var(--text-secondary);max-width:480px;animation:fadeUp .8s ease .4s both}
+  .hero-pain strong{color:var(--text);font-weight:500}
+  .hero-stats{display:flex;gap:56px;margin-top:72px;padding-top:48px;border-top:1px solid var(--border);animation:fadeUp .8s ease .5s both}
+  .hero-stat{text-align:center}
+  .hero-stat-number{font-family:'Bebas Neue',sans-serif;font-size:44px;color:var(--glacier);letter-spacing:2px;line-height:1}
+  .hero-stat-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;margin-top:6px}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+  /* SHARED */
+  .section-wrap{padding:100px 24px;max-width:1100px;margin:0 auto}
+  .section-tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--glacier);margin-bottom:16px}
+  .section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,6vw,76px);letter-spacing:2px;line-height:.95;margin-bottom:20px}
+  .section-desc{font-size:18px;color:var(--text-secondary);max-width:540px;font-weight:300;line-height:1.7}
+
+  /* STEPS */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:64px}
+  .step{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px 28px;position:relative;overflow:hidden;transition:border-color .3s ease,transform .3s ease}
+  .step:hover{border-color:rgba(0,212,255,.25);transform:translateY(-3px)}
+  .step::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--glacier),transparent);opacity:0;transition:opacity .3s ease}
+  .step:hover::after{opacity:1}
+  .step-number{font-family:'Bebas Neue',sans-serif;font-size:80px;color:rgba(0,212,255,.25);line-height:1;margin-bottom:16px;letter-spacing:2px}
+  .step-title{font-size:19px;font-weight:600;margin-bottom:10px}
+  .step-desc{font-size:15px;color:var(--text-secondary);font-weight:300;line-height:1.75}
+
+  /* SCHEDULE */
+  .schedule{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:64px}
+  .schedule-day{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:32px 24px;text-align:center;transition:all .3s ease}
+  .schedule-day:hover{border-color:rgba(0,212,255,.25);transform:translateY(-3px)}
+  .schedule-day-label{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--glacier);margin-bottom:12px}
+  .schedule-day-title{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:2px;margin-bottom:10px}
+  .schedule-day-desc{font-size:14px;color:var(--text-muted);line-height:1.6}
+
+  /* FEATURES */
+  .features-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:64px}
+  .feature-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px;transition:all .3s ease}
+  .feature-card:hover{border-color:rgba(0,212,255,.2);transform:translateY(-2px)}
+  .feature-card.wide{grid-column:span 2;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+  .feature-icon{width:48px;height:48px;background:var(--glacier-dim);border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;font-size:22px}
+  .feature-title{font-size:21px;font-weight:600;margin-bottom:10px}
+  .feature-desc{font-size:15px;color:var(--text-secondary);font-weight:300;line-height:1.75}
+  .feature-list{list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:20px}
+  .feature-list li{display:flex;align-items:center;gap:12px;font-size:15px;color:var(--text-secondary)}
+  .feature-list li::before{content:'';width:6px;height:6px;background:var(--glacier);border-radius:50%;flex-shrink:0}
+
+  /* RACE DAY */
+  .race-day{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:120px 24px;position:relative;overflow:hidden}
+  .race-day::before{content:'RACE DAY';position:absolute;font-family:'Bebas Neue',sans-serif;font-size:260px;color:rgba(0,212,255,.025);letter-spacing:10px;top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;pointer-events:none}
+  .race-day::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--glacier),transparent)}
+  .race-day-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;position:relative}
+  .race-day-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--glacier-dim);border:1px solid rgba(0,212,255,.3);color:var(--glacier);padding:8px 16px;border-radius:100px;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:24px}
+  .race-day-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,7vw,88px);letter-spacing:2px;line-height:.9;margin-bottom:16px}
+  .race-day-sub{font-size:17px;color:var(--glacier);font-weight:500;margin-bottom:20px;line-height:1.5}
+  .race-day-desc{font-size:16px;color:var(--text-secondary);font-weight:300;line-height:1.75;margin-bottom:28px}
+  .race-day-blocks{display:flex;flex-direction:column;gap:10px}
+  .race-block{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 22px;display:flex;align-items:center;justify-content:space-between;transition:all .3s ease}
+  .race-block:hover{border-color:rgba(0,212,255,.3);transform:translateX(6px)}
+  .race-block-name{font-size:15px;font-weight:500}
+  .race-block-detail{font-size:13px;color:var(--glacier);font-weight:600}
+  .race-auto-note{font-size:12px;color:var(--text-muted);padding:12px 4px;letter-spacing:.5px}
+
+  /* CHALLENGE */
+  .challenge-card{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:48px;margin-top:48px;display:grid;grid-template-columns:1fr auto;gap:48px;align-items:center;transition:border-color .3s ease}
+  .challenge-card:hover{border-color:rgba(0,212,255,.2)}
+  .challenge-tag{display:inline-block;background:var(--glacier-dim);border:1px solid rgba(0,212,255,.3);color:var(--glacier);padding:6px 14px;border-radius:100px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px}
+  .challenge-title{font-family:'Bebas Neue',sans-serif;font-size:56px;letter-spacing:3px;line-height:1;margin-bottom:14px}
+  .challenge-desc{font-size:16px;color:var(--text-secondary);font-weight:300;max-width:400px;line-height:1.7;margin-bottom:20px}
+  .challenge-meta{font-size:13px;color:var(--text-muted);margin-bottom:24px}
+  .btn-secondary{display:inline-block;background:transparent;border:1px solid rgba(0,212,255,.4);color:var(--glacier);padding:12px 28px;border-radius:100px;font-weight:600;font-size:14px;text-decoration:none;letter-spacing:.3px;transition:all .2s ease}
+  .btn-secondary:hover{background:var(--glacier-dim);border-color:var(--glacier)}
+  .challenge-exercises{display:flex;flex-direction:column;gap:8px;min-width:230px}
+  .challenge-exercise{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.04);border-radius:10px;padding:11px 16px;font-size:14px;transition:background .2s ease}
+  .challenge-exercise:hover{background:rgba(0,212,255,.06)}
+  .challenge-exercise-name{color:var(--text-secondary)}
+  .challenge-exercise-reps{color:var(--glacier);font-weight:600;font-size:13px}
+
+  /* CTA */
+  .cta-section{text-align:center;padding:130px 24px;position:relative;overflow:hidden}
+  .cta-section::before{content:'';position:absolute;bottom:-100px;left:50%;transform:translateX(-50%);width:900px;height:500px;background:radial-gradient(ellipse,rgba(0,212,255,.06) 0%,transparent 70%);pointer-events:none}
+  .cta-section h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,9vw,108px);letter-spacing:2px;line-height:.92;margin-bottom:20px}
+  .cta-section h2 .accent{color:var(--glacier)}
+  .cta-urgency{font-size:16px;color:var(--text-secondary);margin-bottom:48px;font-weight:300}
+
+  /* FOOTER */
+  .footer-wrap{border-top:1px solid var(--border);padding:44px 24px;max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px}
+  .footer-logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:4px;color:var(--text);text-decoration:none}
+  .footer-links{display:flex;gap:32px;flex-wrap:wrap}
+  .footer-links a{color:var(--text-muted);text-decoration:none;font-size:14px;transition:color .2s ease}
+  .footer-links a:hover{color:var(--text)}
+  .footer-social{display:flex;gap:20px}
+  .footer-social a{color:var(--text-muted);text-decoration:none;font-size:14px;transition:color .2s ease}
+  .footer-social a:hover{color:var(--glacier)}
+
+  /* REVEAL */
+  .reveal{opacity:0;transform:translateY(36px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.visible{opacity:1;transform:translateY(0)}
+
+  /* RESPONSIVE */
+  @media(max-width:768px){
+    nav{padding:16px 20px}
+    .steps,.schedule{grid-template-columns:1fr}
+    .features-grid{grid-template-columns:1fr}
+    .feature-card.wide{grid-column:span 1;grid-template-columns:1fr}
+    .race-day-inner{grid-template-columns:1fr;gap:56px}
+    .challenge-card{grid-template-columns:1fr}
+    .hero-stats{gap:32px}
+    .footer-wrap{flex-direction:column;align-items:flex-start}
+  }
+</style>
 </head>
 <body>
-  <h1 style="color:#00d4ff">BRIK</h1>
-  <a href="privacy-policy.html">Privacy Policy</a>
-  <a href="terms-of-service.html">Terms of Service</a>
+
+<nav>
+  <a href="/" class="nav-logo">BRIK</a>
+  <a href="https://apps.apple.com/us/app/brik-block-workout-coach/id6761815514" class="nav-cta" target="_blank">Download Free</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">Now Live on App Store</div>
+  <h1>STOP THINKING.<br><span class="line2">START TRAINING.</span></h1>
+  <p class="hero-sub">Strength &amp; conditioning workouts for HYROX, DEKA, and serious gym training. No repeats. No planning. Just show up.</p>
+  <p class="hero-identity">Built for athletes who actually train.</p>
+  <div class="hero-actions">
+    <a href="https://apps.apple.com/us/app/brik-block-workout-coach/id6761815514" class="btn-primary" target="_blank">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      Download Free. Start Training in 10 Seconds.
+    </a>
+    <p class="hero-micro">No subscription. No setup. Open and go.</p>
+  </div>
+  <div class="hero-pain"><strong>Most workout apps make you think.</strong> BRIK removes that completely.</div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-number">3</div><div class="hero-stat-label">Days/Week</div></div>
+    <div class="hero-stat"><div class="hero-stat-number">60+</div><div class="hero-stat-label">Exercises</div></div>
+    <div class="hero-stat"><div class="hero-stat-number">0</div><div class="hero-stat-label">Repeats</div></div>
+    <div class="hero-stat"><div class="hero-stat-number">$0</div><div class="hero-stat-label">Forever</div></div>
+  </div>
+</section>
+
+<div class="section-wrap reveal">
+  <span class="section-tag">How it works</span>
+  <h2 class="section-title">THREE STEPS.<br>ZERO EXCUSES.</h2>
+  <p class="section-desc">BRIK removes every barrier between you and a real workout.</p>
+  <div class="steps">
+    <div class="step"><div class="step-number">01</div><div class="step-title">Tell BRIK what you have</div><p class="step-desc">Full gym, dumbbells, or bodyweight — it adapts instantly to whatever you have access to.</p></div>
+    <div class="step"><div class="step-number">02</div><div class="step-title">Get a real workout instantly</div><p class="step-desc">Built using your equipment, your history, and smart programming rules. Never the same session twice.</p></div>
+    <div class="step"><div class="step-number">03</div><div class="step-title">Show up and execute</div><p class="step-desc">No decisions. No wasted time. Just train. The coach handled everything else before you got there.</p></div>
+  </div>
+</div>
+
+<div class="section-wrap reveal">
+  <span class="section-tag">The Program</span>
+  <h2 class="section-title">BUILT LIKE A<br>REAL COACH.</h2>
+  <p class="section-desc">Structured training. No random circuits. No junk volume.</p>
+  <div class="schedule">
+    <div class="schedule-day"><div class="schedule-day-label">Monday</div><div class="schedule-day-title">STRENGTH DAY</div><div class="schedule-day-desc">Heavy compounds. Progressive overload. Build real power.</div></div>
+    <div class="schedule-day"><div class="schedule-day-label">Wednesday</div><div class="schedule-day-title">CONDITIONING</div><div class="schedule-day-desc">Engine work. Circuits that actually push your limits.</div></div>
+    <div class="schedule-day"><div class="schedule-day-label">Friday</div><div class="schedule-day-title">FUNCTIONAL DAY</div><div class="schedule-day-desc">Hybrid movement. Strength meets race-day intensity.</div></div>
+  </div>
+</div>
+
+<div class="section-wrap reveal">
+  <span class="section-tag">Features</span>
+  <h2 class="section-title">EVERYTHING YOUR<br>COACH KNOWS.</h2>
+  <p class="section-desc">Smart programming built into every session.</p>
+  <div class="features-grid">
+    <div class="feature-card"><div class="feature-icon">🧠</div><div class="feature-title">Never Repeat a Workout</div><p class="feature-desc">BRIK tracks your last 7 days. Every session is new. The longer you use it the smarter it gets.</p></div>
+    <div class="feature-card"><div class="feature-icon">🏋️</div><div class="feature-title">Works With Any Setup</div><p class="feature-desc">Full gym, home gym, or bodyweight only. No adjustments needed. Tell BRIK what you have and it handles the rest.</p></div>
+    <div class="feature-card"><div class="feature-icon">⚡</div><div class="feature-title">Compete Every Month</div><p class="feature-desc">One challenge. Everyone pushing. Updated automatically every month with no app update required.</p></div>
+    <div class="feature-card"><div class="feature-icon">📊</div><div class="feature-title">See Your Consistency</div><p class="feature-desc">Track sessions, streaks, and progress over time. A Training Map that shows your structure building visually.</p></div>
+    <div class="feature-card wide">
+      <div>
+        <div class="feature-icon">🏆</div>
+        <div class="feature-title">Challenge a Friend</div>
+        <p class="feature-desc">Finish a workout and dare your friends to beat your rounds. Build a training culture around you.</p>
+        <ul class="feature-list">
+          <li>Send your workout to any friend</li>
+          <li>They complete it and log their rounds</li>
+          <li>See who pushed harder</li>
+          <li>Works with any equipment setup</li>
+        </ul>
+      </div>
+      <div style="background:var(--surface);border-radius:18px;padding:32px;border:1px solid var(--border)">
+        <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px">Challenge sent</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:38px;letter-spacing:2px;margin-bottom:8px;line-height:1">STRENGTH DAY</div>
+        <div style="font-size:14px;color:var(--text-secondary);margin-bottom:24px;font-weight:300">Chris got 8 rounds. Think you can beat that?</div>
+        <div style="background:var(--glacier);color:#000;padding:13px 26px;border-radius:100px;font-weight:700;font-size:14px;display:inline-block">Accept Challenge</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="race-day reveal">
+  <div class="race-day-inner">
+    <div>
+      <div class="race-day-eyebrow">Hybrid Mode</div>
+      <h2 class="race-day-title">BUILT FOR<br>RACE DAY.</h2>
+      <p class="race-day-sub">Real training for HYROX and DEKA athletes.<br>Not random workouts. Not watered down circuits.</p>
+      <p class="race-day-desc">Sled movements. Erg machines. Farmer carries. Explosive blocks. BRIK builds race-style sessions automatically so you can focus on execution.</p>
+      <ul class="feature-list">
+        <li>Ski Erg, Row Erg, Bike Erg support</li>
+        <li>Sled push and pull circuits</li>
+        <li>Farmers carries and lunges</li>
+        <li>Wall balls and explosive blocks</li>
+        <li>Smart rotation to protect your legs</li>
+        <li>Built for real race demands</li>
+      </ul>
+    </div>
+    <div class="race-day-blocks">
+      <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;padding-left:4px">Generated session · 3 blocks · 8 min each</div>
+
+      <div style="font-size:11px;color:var(--glacier);text-transform:uppercase;letter-spacing:1.5px;margin:8px 4px 6px;font-weight:600">Block 1 — Sled + Machine</div>
+      <div class="race-block"><span class="race-block-name">A · Sled Push</span><span class="race-block-detail">25m</span></div>
+      <div class="race-block"><span class="race-block-name">B · Row Erg</span><span class="race-block-detail">150m</span></div>
+      <div class="race-block"><span class="race-block-name">C · Dead Bug</span><span class="race-block-detail">10 each side</span></div>
+
+      <div style="font-size:11px;color:var(--glacier);text-transform:uppercase;letter-spacing:1.5px;margin:12px 4px 6px;font-weight:600">Block 2 — Lunge & Row</div>
+      <div class="race-block"><span class="race-block-name">A · BB Lunges</span><span class="race-block-detail">10 each leg</span></div>
+      <div class="race-block"><span class="race-block-name">B · Ski Erg</span><span class="race-block-detail">150m</span></div>
+      <div class="race-block"><span class="race-block-name">C · Plank Shoulder Tap</span><span class="race-block-detail">10 each side</span></div>
+
+      <div style="font-size:11px;color:var(--glacier);text-transform:uppercase;letter-spacing:1.5px;margin:12px 4px 6px;font-weight:600">Block 3 — Burpee & Wall Ball</div>
+      <div class="race-block"><span class="race-block-name">A · Burpee Broad Jumps</span><span class="race-block-detail">10 reps</span></div>
+      <div class="race-block"><span class="race-block-name">B · Wall Balls</span><span class="race-block-detail">15 reps</span></div>
+      <div class="race-block"><span class="race-block-name">C · Bear Crawl Steps</span><span class="race-block-detail">30 sec</span></div>
+
+      <div class="race-auto-note">Generated fresh every session. Never the same twice.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-wrap reveal">
+  <span class="section-tag">Monthly Challenge</span>
+  <h2 class="section-title">ONE CHALLENGE.<br>EVERYONE COMPETING.</h2>
+  <p class="section-desc">A new test every month. Simple. Brutal. Addictive.</p>
+  <div class="challenge-card">
+    <div>
+      <div class="challenge-tag">April Challenge</div>
+      <div class="challenge-title">THE PYRAMID</div>
+      <p class="challenge-desc">Start at 10 reps. Work your way down to 1. Complete every movement before dropping a rep.</p>
+      <p class="challenge-meta">Estimated time: 25–35 minutes</p>
+      <a href="https://apps.apple.com/us/app/brik-block-workout-coach/id6761815514" class="btn-secondary" target="_blank">Try This Month's Challenge</a>
+    </div>
+    <div class="challenge-exercises">
+      <div class="challenge-exercise"><span class="challenge-exercise-name">Burpees</span><span class="challenge-exercise-reps">10 → 1</span></div>
+      <div class="challenge-exercise"><span class="challenge-exercise-name">BB Bent Over Row</span><span class="challenge-exercise-reps">10 → 1</span></div>
+      <div class="challenge-exercise"><span class="challenge-exercise-name">Dead Bugs</span><span class="challenge-exercise-reps">10 → 1</span></div>
+      <div class="challenge-exercise"><span class="challenge-exercise-name">Reverse Lunges</span><span class="challenge-exercise-reps">10 → 1</span></div>
+      <div class="challenge-exercise"><span class="challenge-exercise-name">KB Swings</span><span class="challenge-exercise-reps">10 → 1</span></div>
+    </div>
+  </div>
+</div>
+
+<section class="cta-section reveal">
+  <h2>SHOW UP.<br><span class="accent">YOUR COACH<br>HANDLES THE REST.</span></h2>
+  <p class="cta-urgency">Start your first workout in under 10 seconds.<br>No subscription. No planning. Just train.</p>
+  <a href="https://apps.apple.com/us/app/brik-block-workout-coach/id6761815514" class="btn-primary" target="_blank">
+    <svg viewBox="0 0 24 24" fill="currentColor" style="width:20px;height:20px"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+    Download Free. Start Training.
+  </a>
+  <p style="margin-top:16px;font-size:13px;color:var(--text-muted)">Android coming soon</p>
+</section>
+
+<div class="footer-wrap">
+  <a href="/" class="footer-logo">BRIK</a>
+  <div class="footer-links">
+    <a href="https://getbrik.app/privacy">Privacy Policy</a>
+    <a href="https://getbrik.app/terms">Terms of Service</a>
+    <a href="mailto:support@getbrik.app">support@getbrik.app</a>
+  </div>
+  <div class="footer-social">
+    <a href="https://instagram.com/getbrik_app" target="_blank">Instagram</a>
+    <a href="https://x.com/getbrik_app" target="_blank">X</a>
+    <a href="https://apps.apple.com/us/app/brik-block-workout-coach/id6761815514" target="_blank">App Store</a>
+  </div>
+</div>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => observer.observe(el));
+</script>
 </body>
 </html>
